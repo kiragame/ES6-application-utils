@@ -3,7 +3,7 @@
 //     2. FileReader onload异步执行
 //     3. Session-ID不能为中文
 
-export async function upload(params) {
+export function upload(params) {
   const { data, id, offSet, reqSize: reqS } = params;
   // 函数返回值
   const feedback = {
@@ -19,7 +19,7 @@ export async function upload(params) {
 
   const url = "your request url";
 
-  const ret = new Promise(resolve => {
+  return new Promise(resolve => {
     // js中的blob没有没有直接读出其数据的方法，通过FileReader来读取相关数据
     const reader = new FileReader();
     reader.readAsArrayBuffer(data);
@@ -64,8 +64,6 @@ export async function upload(params) {
       });
     };
   });
-
-  return feedback;
 }
 
 function getFileUploadHeader(sessionId, start, end, total, fileName) {
@@ -77,3 +75,6 @@ function getFileUploadHeader(sessionId, start, end, total, fileName) {
     "Content-Type": "application/octet-stream",
   };
 }
+
+// 取值用async/await
+let data = await upload(...);
