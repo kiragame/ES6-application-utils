@@ -76,5 +76,7 @@ function getFileUploadHeader(sessionId, start, end, total, fileName) {
   };
 }
 
-// 取值用async/await
-let data = await upload(...);
+// 取值用then
+//upload(...).then(res => {
+//      ...
+//});
