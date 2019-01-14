@@ -1,15 +1,15 @@
-// nginx-upload-module À©Õ¹°üµÄÉÏ´«demo- JAVASCRIPTÊµÏÖ£¨ES6)
-// ¿Ó£º1. ÇëÇóÊ±´«ÊäÊý¾ÝÀàÐÍÎªBytes
-//     2. FileReader onloadÒì²½Ö´ÐÐ
-//     3. Session-ID²»ÄÜÎªÖÐÎÄ
+// nginx-upload-module æ‰©å±•åŒ…çš„ä¸Šä¼ demo- JAVASCRIPTå®žçŽ°ï¼ˆES6)
+// å‘ï¼š1. è¯·æ±‚æ—¶ä¼ è¾“æ•°æ®ç±»åž‹ä¸ºBytes
+//     2. FileReader onloadå¼‚æ­¥æ‰§è¡Œ
+//     3. Session-IDä¸èƒ½ä¸ºä¸­æ–‡
 
 export async function upload(params) {
   const { data, id, offSet, reqSize: reqS } = params;
-  // º¯Êý·µ»ØÖµ
+  // å‡½æ•°è¿”å›žå€¼
   const feedback = {
-	// ÉÏ´«ÊÇ·ñ³É¹¦
+	// ä¸Šä¼ æ˜¯å¦æˆåŠŸ
     message: "error",
-	// °Ù·Ö±È; ÏÂÒ»´ÎÉÏ´«¿ªÊ¼Î»ÖÃ; session_id¡£µ±percent === 100Ê±ÎÄ¼þÒÑÈ«²¿´«Êä
+	// ç™¾åˆ†æ¯”; ä¸‹ä¸€æ¬¡ä¸Šä¼ å¼€å§‹ä½ç½®; session_idã€‚å½“percent === 100æ—¶æ–‡ä»¶å·²å…¨éƒ¨ä¼ è¾“
     data: {
       percent: 0,
       offSet: 0,
@@ -19,12 +19,12 @@ export async function upload(params) {
 
   const url = "your request url";
 
-  const ret = new Promise(resolve => {
-    // jsÖÐµÄblobÃ»ÓÐÃ»ÓÐÖ±½Ó¶Á³öÆäÊý¾ÝµÄ·½·¨£¬Í¨¹ýFileReaderÀ´¶ÁÈ¡Ïà¹ØÊý¾Ý
+  const ret = await new Promise(resolve => {
+    // jsä¸­çš„blobæ²¡æœ‰æ²¡æœ‰ç›´æŽ¥è¯»å‡ºå…¶æ•°æ®çš„æ–¹æ³•ï¼Œé€šè¿‡FileReaderæ¥è¯»å–ç›¸å…³æ•°æ®
     const reader = new FileReader();
     reader.readAsArrayBuffer(data);
 
-    //  µ±¶ÁÈ¡²Ù×÷³É¹¦Íê³ÉÊ±µ÷ÓÃ.
+    //  å½“è¯»å–æ“ä½œæˆåŠŸå®Œæˆæ—¶è°ƒç”¨.
     reader.onload = () => {
       const reqSize = reqS && reqS >= 0 ? reqS : 0;
       const totalSize = reader.result.byteLength;
@@ -32,16 +32,16 @@ export async function upload(params) {
       const start = offSet >= totalSize ? totalSize - 1 : offSet;
       const end = offSet + reqSize > totalSize ? totalSize : offSet + reqSize;
 
-	  // Ìæ»»Îª×Ô¼ºµÄÇëÇó·½·¨
+	  // æ›¿æ¢ä¸ºè‡ªå·±çš„è¯·æ±‚æ–¹æ³•
       return request(url, {
         method: "POST",
-		// ÇÐ·ÖÎÄ¼þ[start, end)
+		// åˆ‡åˆ†æ–‡ä»¶[start, end)
         body: reader.result.slice(start, end),
         headers: {
           ...(getFileUploadHeader(
             feedback.data.session_id,
             start,
-			// Êµ¼Ê´«ÊäÎª[start, end-1]
+			// å®žé™…ä¼ è¾“ä¸º[start, end-1]
             end - 1,
             totalSize,
             fileName
@@ -65,13 +65,7 @@ export async function upload(params) {
     };
   });
 
-  if (ret) {
-    return ret.then(res => {
-      return res;
-    });
-  } else {
-    return feedback;
-  }
+  return ret;
 }
 
 function getFileUploadHeader(sessionId, start, end, total, fileName) {
