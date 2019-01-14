@@ -19,7 +19,7 @@ export async function upload(params) {
 
   const url = "your request url";
 
-  const ret = await new Promise(resolve => {
+  const ret = new Promise(resolve => {
     // js中的blob没有没有直接读出其数据的方法，通过FileReader来读取相关数据
     const reader = new FileReader();
     reader.readAsArrayBuffer(data);
@@ -65,7 +65,7 @@ export async function upload(params) {
     };
   });
 
-  return ret;
+  return feedback;
 }
 
 function getFileUploadHeader(sessionId, start, end, total, fileName) {
