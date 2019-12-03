@@ -1,3 +1,5 @@
+## Dependencies
+axios  typescript
 ## Usage
 ```code
 import UploadQueue from './index';
