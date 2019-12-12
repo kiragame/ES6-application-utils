@@ -1,4 +1,4 @@
-#双向链表
+# 双向链表
 ## API
 add(node) => null | node
 insert(index, node) => null | node
@@ -8,7 +8,7 @@ getScopeList(fromIndex, endIndex) => node[]
 remove(index) => node
 size() => number
 ## 使用方法
-``code
+```code
 import LinkedList from './LinkedList';
 
 const list = new LinkedList();
@@ -21,4 +21,4 @@ console.log(list.getList());
 list.remove(7);
 console.log(list.getList());
 
-``
+```
